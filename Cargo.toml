@@ -1,0 +1,24 @@
+[workspace]
+resolver = "2"
+members = ["crates/crenel", "crates/crenel-pingora"]
+exclude = ["fuzz"]
+
+[workspace.package]
+edition = "2021"
+# Policy baseline matching the consumer's pin (pingora 0.8.1 era), not a proven minimum.
+rust-version = "1.96.0"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/yourabi/crenel"
+readme = "README.md"
+
+[workspace.dependencies]
+# Resolver syscall surface (openat2, statx, fstat) — safe wrappers, no libc unsafe in our code.
+rustix = { version = "1", default-features = false, features = ["fs", "std"] }
+# Lock-free root-handle swap for deploy-coupled re-pin (design D2.7).
+arc-swap = "1"
+tempfile = "3"
+# Adapter target framework — pinned to the consumer's exact version.
+pingora = { version = "=0.8.1", default-features = false }
+bytes = "1"
+async-trait = "0.1"
+tokio = { version = "1", default-features = false }

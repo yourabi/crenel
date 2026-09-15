@@ -1,0 +1,33 @@
+[package]
+name = "crenel"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+readme.workspace = true
+description = "Framework-agnostic static-file-serving engine: decode-once path classification and openat2-contained resolution"
+
+[lints.rust]
+# cargo-fuzz builds with --cfg fuzzing; declare it so the fuzz-only exports lint clean.
+unexpected_cfgs = { level = "warn", check-cfg = ["cfg(fuzzing)"] }
+
+[dependencies]
+# RFC 9110 §5.6.7 HTTP-date parse (all three formats) + IMF-fixdate formatting; tiny,
+# dependency-free, hyper's choice — hand-rolled date math is how off-by-one CVEs happen.
+httpdate = "1"
+
+[target.'cfg(target_os = "linux")'.dependencies]
+rustix = { workspace = true }
+arc-swap = { workspace = true }
+
+[dev-dependencies]
+tempfile = { workspace = true }
+# The nginx golden harness formats probe dates itself.
+httpdate = "1"
+
+[target.'cfg(target_os = "linux")'.dev-dependencies]
+# IO microbench spike only (examples/spike.rs); the library itself is runtime-agnostic.
+tokio = { version = "1", default-features = false, features = ["rt-multi-thread", "macros", "time", "fs"] }
+# Resolver tests create FIFOs and inspect fds directly.
+rustix = { workspace = true }

@@ -1,0 +1,27 @@
+[package]
+name = "crenel-pingora"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+readme.workspace = true
+description = "Pingora adapter for the crenel static-file engine: streamed serving over the server Session with deadline, IO-semaphore, and read/write pipelining"
+
+# Linux-only, like the runtime it serves: all real deps are
+# target-gated; on other platforms the crate compiles to a stub so workspace-wide
+# `cargo check` stays green on the Windows dev host.
+[target.'cfg(target_os = "linux")'.dependencies]
+crenel = { path = "../crenel", version = "0.1.0" }
+pingora = { workspace = true }
+bytes = { workspace = true }
+async-trait = { workspace = true }
+tokio = { workspace = true, features = ["sync", "time", "rt", "rt-multi-thread"] }
+rustix = { workspace = true }
+
+[target.'cfg(target_os = "linux")'.dev-dependencies]
+tempfile = { workspace = true }
+
+[[bin]]
+name = "crenel-serve"
+path = "src/bin/crenel-serve.rs"

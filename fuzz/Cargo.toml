@@ -1,0 +1,43 @@
+[package]
+name = "crenel-fuzz"
+version = "0.0.0"
+publish = false
+edition = "2021"
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+libfuzzer-sys = "0.4"
+crenel = { path = "../crates/crenel" }
+
+[[bin]]
+name = "fuzz_decode"
+path = "fuzz_targets/fuzz_decode.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "fuzz_classify"
+path = "fuzz_targets/fuzz_classify.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "fuzz_range"
+path = "fuzz_targets/fuzz_range.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "fuzz_conditionals"
+path = "fuzz_targets/fuzz_conditionals.rs"
+test = false
+doc = false
+bench = false
+
+[profile.release]
+debug = 1
