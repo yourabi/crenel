@@ -1,0 +1,26 @@
+[package]
+name = "crenel-pingora"
+version = "0.2.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+readme.workspace = true
+description = "Pingora adapter for the crenel static-file engine: streamed serving over the server Session with deadline, IO-semaphore, and read/write pipelining"
+
+# The filesystem resolver requires Linux or macOS. Other targets compile an empty stub,
+# allowing workspace checks for the platform-independent engine modules.
+[target.'cfg(any(target_os = "linux", target_os = "macos"))'.dependencies]
+crenel = { path = "../crenel", version = "0.2.0" }
+pingora = { workspace = true }
+bytes = { workspace = true }
+async-trait = { workspace = true }
+tokio = { workspace = true, features = ["sync", "time", "rt", "rt-multi-thread"] }
+rustix = { workspace = true }
+
+[target.'cfg(any(target_os = "linux", target_os = "macos"))'.dev-dependencies]
+tempfile = { workspace = true }
+
+[[bin]]
+name = "crenel-serve"
+path = "src/bin/crenel-serve.rs"

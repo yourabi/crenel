@@ -1,0 +1,4 @@
+[toolchain]
+# Policy pin, not a proven MSRV.
+channel = "1.96.0"
+components = ["rustfmt", "clippy"]
